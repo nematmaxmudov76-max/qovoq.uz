@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Platform</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#" class="nav-logo" onclick="backToFeed(); return false;">
+        <i class="fa-solid fa-feather-pointed logo-gradient"></i>
+        <span>Vibe<span class="logo-gradient">Blog</span></span>
+      </a>
+
+      <div class="nav-search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="search-input" class="search-input" placeholder="Search articles, keywords..." />
+      </div>
+
+      <div class="nav-actions" id="nav-actions">
+        <!-- Injected dynamically via JS based on auth state -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container" style="flex: 1;">
+
+    <!-- Feed View -->
+    <div id="feed-view">
+      <section class="hero">
+        <h1 class="hero-title">Thoughts, stories &amp; ideas.</h1>
+        <p class="hero-subtitle">A modern blogging platform built with FastAPI, SQLAlchemy Async, Redis, and Starlette Admin.</p>
+      </section>
+
+      <!-- Tags Filter Pills -->
+      <nav class="tags-bar" id="tags-bar" aria-label="Filter by tags">
+        <!-- Rendered dynamically -->
+      </nav>
+
+      <!-- Posts Grid -->
+      <section class="posts-grid" id="posts-container">
+        <!-- Rendered dynamically -->
+      </section>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Post Detail View (Hidden by default) -->
+    <div id="detail-view" class="detail-view" style="display: none;">
+      <!-- Rendered dynamically -->
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border-light); padding: 2rem 0; margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+    <div class="container">
+      <p>&copy; 2026 VibeBlog API Platform. Powered by FastAPI &amp; PostgreSQL.</p>
+    </div>
+  </footer>
+
+  <!-- Auth Modal (Login / Register) -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Account Access</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-tabs">
+          <button class="form-tab active" id="tab-login">Sign In</button>
+          <button class="form-tab" id="tab-register">Create Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login">
+          <div class="form-group">
+            <label class="form-label" for="login-username">Username or Email</label>
+            <input type="text" id="login-username" class="form-input" required autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-input" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="form-register" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="reg-username">Username</label>
+            <input type="text" id="reg-username" class="form-input" required autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email</label>
+            <input type="email" id="reg-email" class="form-input" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <input type="password" id="reg-password" class="form-input" required autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Create Account
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Post Modal -->
+  <div class="modal-overlay" id="new-post-modal">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Article</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-new-post">
+          <div class="form-group">
+            <label class="form-label" for="post-title">Article Title</label>
+            <input type="text" id="post-title" class="form-input" placeholder="e.g. Modern Async Python with SQLAlchemy 2.0" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="post-excerpt">Short Summary / Excerpt</label>
+            <input type="text" id="post-excerpt" class="form-input" placeholder="A brief teaser for the feed..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="post-tags">Tags (comma-separated)</label>
+            <input type="text" id="post-tags" class="form-input" placeholder="python, fastapi, postgres" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="post-content">Content</label>
+            <textarea id="post-content" class="form-textarea" placeholder="Write your full story here..." required></textarea>
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="checkbox" id="post-published" checked style="width: 1.1rem; height: 1.1rem; cursor: pointer;" />
+            <label for="post-published" style="font-size: 0.9rem; font-weight: 500; cursor: pointer;">Publish immediately</label>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-outline modal-close">Cancel</button>
+            <button type="submit" class="btn btn-primary">Publish Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="./js/api.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
