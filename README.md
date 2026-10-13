@@ -1,4 +1,4 @@
-📝 Personal Blog API
+📝 ***Personal Blog API***
 Asinxron arxitekturaga asoslangan, yuqori tezlikda ishlovchi blog platformasi backend REST API loyihasi.
 
 Loyihada maqolalar (posts), ierarxik izohlar (nested comments), teglash tizimi, reaksiyalar (likes) hamda JWT orqali xavfsiz autentifikatsiya to'liq amalga oshirilgan.
@@ -14,7 +14,7 @@ Interaktivlik: Maqolalarga like bosish/qaytarib olish (toggle) va ko'rishlar son
 
 Optimallashgan So'rovlar: Asinxron SQLAlchemy 2.0 yordamida N+1 muammosisiz (joinedload, selectinload) tuzilgan SQL so'rovlar.
 
-🛠 Texnologiyalar
+🛠 **Texnologiyalar**
 Framework: FastAPI
 
 ORM: SQLAlchemy 2.0 (Async) + Alembic
@@ -27,17 +27,20 @@ Drayver: asyncpg
 
 Muhit & Konteyner: Docker & Docker Compose, uv
 
-🚀 Ishga Tushirish
+🚀 **Ishga Tushirish**
 Repozitoriyadan nusxa oling va .env faylini sozlang:
-
-Bash
+```
 cp .env.example .env
+```
+
 Docker Compose orqali barcha servislarni ishga tushiring:
-
-Bash
+```
 docker compose up --build -d
-Migratsiyalarni bazaga qo'llang:
+```
 
-Bash
+Migratsiyalarni bazaga qo'llang:
+```
 docker compose exec app alembic upgrade head
+```
+
 API hujjati (Swagger UI): http://localhost:8000/docs manzilida mavjud.
